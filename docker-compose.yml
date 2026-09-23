@@ -1,0 +1,39 @@
+services:
+  matrix-welcome-bot:
+    # Built automatically by GitHub Actions on every push (see
+    # .github/workflows/docker-build.yml) and pushed to GHCR.
+    # Portainer only ever pulls this — deploying is just: upload
+    # this file, fill in env vars, click Deploy.
+    # Replace <owner> with your GitHub username.
+    image: ghcr.io/<owner>/matrix-welcome-bot:latest
+    pull_policy: always
+    container_name: matrix-welcome-bot
+    restart: unless-stopped
+
+    volumes:
+      # Point this at the dataset you created in TrueNAS (Storage →
+      # Pools → Add Dataset), not an anonymous named volume — this
+      # keeps the bot's data visible in the TrueNAS UI and covered
+      # by your normal ZFS snapshot schedule. Adjust the pool/path.
+      - /mnt/bananiserver/matrix-welcome-bot-data:/data
+
+    environment:
+      MATRIX_HOMESERVER: ${MATRIX_HOMESERVER}
+      MATRIX_USERNAME: ${MATRIX_USERNAME}
+      MATRIX_PASSWORD: ${MATRIX_PASSWORD}
+      BOT_RECOVERY_KEY: ${BOT_RECOVERY_KEY}
+      KEY_EXPORT_PASSPHRASE: ${KEY_EXPORT_PASSPHRASE}
+
+      SPACE_CHILD_ROOMS: ${SPACE_CHILD_ROOMS}
+      TRIGGER_ROOMS: ${TRIGGER_ROOMS}
+
+      WELCOME_TRIGGER: ${WELCOME_TRIGGER}
+      WELCOME_DEBOUNCE_SECONDS: "30"
+
+      # Keep all persistent files inside the mounted /data volume
+      # rather than the container's writable layer, so they aren't
+      # lost on redeploy.
+      SESSION_FILE: /data/session.json
+      CRYPTO_STORE_PATH: /data/bot-store
+      KEY_EXPORT_FILE: /data/element-keys-shareable.txt
+      DIAGNOSTIC_KEY_FILE: /data/diagnostic-keys.txt
