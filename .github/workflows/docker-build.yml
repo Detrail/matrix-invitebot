@@ -30,4 +30,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/matrix-welcome-bot:latest
+          # Docker/OCI requires all-lowercase image names. GitHub
+          # preserves your account's actual casing (Detrail) in
+          # github.repository_owner, which GHCR then rejects — so
+          # this is hardcoded lowercase rather than using that
+          # variable directly.
+          tags: ghcr.io/detrail/matrix-welcome-bot:latest
