@@ -5,16 +5,15 @@ FROM rust:1-bookworm AS builder
 
 WORKDIR /app
 
-# Cache dependency compilation separately from source changes so
-# `docker build` doesn't recompile every dependency on every code
-# edit. If this trick misbehaves for your project layout, just
-# delete this block — the final `cargo build --release` below
-# still works fine without it, just slower on rebuilds.
-COPY Cargo.toml Cargo.lock ./
-RUN mkdir src && echo "fn main() {}" > src/main.rs \
-    && cargo build --release --locked \
-    && rm -rf src
-
+# Note: this does a full rebuild of dependencies on every push,
+# rather than caching them behind a dummy main.rs. That caching
+# trick is fragile — Cargo's freshness check can be fooled by how
+# Docker sets file timestamps on COPY, silently skipping the real
+# rebuild and leaving a stale empty-main.rs binary in the image
+# (which is what caused the earlier "container exits instantly
+# with no output" issue). If you want fast caching back later,
+# use `cargo-chef` instead — it's built specifically to do this
+# correctly.
 COPY . .
 RUN cargo build --release --locked
 
