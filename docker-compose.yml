@@ -5,7 +5,7 @@ services:
     # Portainer only ever pulls this — deploying is just: upload
     # this file, fill in env vars, click Deploy.
     # Replace <owner> with your GitHub username.
-    image: ghcr.io/<owner>/matrix-welcome-bot:latest
+    image: ghcr.io/detrail/matrix-welcome-bot:latest
     pull_policy: always
     container_name: matrix-welcome-bot
     restart: unless-stopped
@@ -18,7 +18,7 @@ services:
       - /mnt/bananiserver/matrix-welcome-bot-data:/data
 
     environment:
-      MATRIX_HOMESERVER: ${MATRIX_HOMESERVER}
+      MATRIX_HOMESERVER: https://matrix.org
       MATRIX_USERNAME: ${MATRIX_USERNAME}
       MATRIX_PASSWORD: ${MATRIX_PASSWORD}
       BOT_RECOVERY_KEY: ${BOT_RECOVERY_KEY}
@@ -27,7 +27,7 @@ services:
       SPACE_CHILD_ROOMS: ${SPACE_CHILD_ROOMS}
       TRIGGER_ROOMS: ${TRIGGER_ROOMS}
 
-      WELCOME_TRIGGER: ${WELCOME_TRIGGER}
+      WELCOME_TRIGGER: "!welcome"
       WELCOME_DEBOUNCE_SECONDS: "30"
 
       # Keep all persistent files inside the mounted /data volume
