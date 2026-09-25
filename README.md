@@ -1,12 +1,12 @@
 # Matrix Welcome Bot
 
-A small Matrix bot that invites people into a set of rooms when they send a trigger phrase (`!welcome` by default) in an allow-listed room. Built on the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk), it handles end-to-end encryption properly — including cross-signing recovery and historical key sharing — so invitees can actually read the room's encrypted history, not just join a room they can't decrypt anything in.
+A small Matrix bot that invites people into a set of rooms when they send a trigger phrase (`!welcome` by default) in an allow-listed room. Built on the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk), it handles end-to-end encryption properly — including cross-signing recovery and historical key sharing — so invitees can actually read the room's encrypted history via an exported element-keys.txt, not just join a room they can't decrypt anything in.
 
 ## How it works
 
 1. The bot logs in (or restores a saved session) as a dedicated Matrix account.
 2. It recovers its cross-signing identity from a recovery key, so the account is verified rather than an untrusted device.
-3. It optionally imports a historical room-key export (e.g. from Element), so it holds decryption keys for messages sent before the bot joined.
+3. It optionally imports a historical room-key export file (e.g. from Element), so it holds decryption keys for messages sent before the bot joined.
 4. It watches for a trigger phrase, sent from an allow-listed set of rooms.
 5. On trigger, it invites the sender into a configured set of target rooms, sharing message-history decryption keys with them on invite (MSC4268).
 
@@ -61,8 +61,8 @@ On restart, the bot restores the existing session rather than logging in fresh �
 
 - **`BOT_RECOVERY_KEY` is a master key, not a room-scoped one.** It unlocks Secure Secret Storage — cross-signing keys and key backup — covering every encrypted room the account has ever seen, not just the configured target rooms. Treat it accordingly, and rotate it if the host is ever compromised.
 - **`TRIGGER_ROOMS` is a hard allow-list.** Without it, any room the bot happens to be a member of would accept the trigger phrase. Keep this list tight — anyone who can message the bot in an allow-listed room can self-serve an invite (and full historical decryption keys) into every target room.
-- **History sharing is intentional but worth knowing about.** Invitees get decryption keys for the room's *entire* history the bot holds keys for, not just messages sent after they join.
+- **History sharing** Invitees get decryption keys for the room's *entire* history the bot holds keys for, not just messages sent after they join.
 - Don't commit `.env`, `session.json`, or the crypto store to version control.
 
 ## License
-
+MIT+N
