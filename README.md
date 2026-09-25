@@ -11,6 +11,7 @@ A small Matrix bot that invites people into a set of rooms when they send a trig
 5. On trigger, it invites the sender into a configured set of target rooms, sharing message-history decryption keys with them on invite (MSC4268).
 
 ## Configuration
+First create a Matrix account to serve as the bot noting all credentials, keys, and passphrases.
 
 All configuration is via environment variables — see [`.env.example`](./.env.example) for the full list with comments. The important ones:
 
@@ -32,6 +33,8 @@ Only tested using Element Web.
 1. In Element Web go to Settings>Encryption
 2. Under Advanced export recovery keys with a secure password that should be entered into the KEY_EXPORT_PASSPHRASE variable
 3. Rename the downloaded element-keys.txt to element-keys-shareable.txt and place it into the root bot directory
+
+These keys will be added to the bot's crypto storage for sharing upon bot startup and will include all keys, not just the keys of the rooms the bot is assigned to.
 
 ## Running it
 
