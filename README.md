@@ -27,6 +27,12 @@ All configuration is via environment variables — see [`.env.example`](./.env.e
 
 Startup fails fast with a clear error if a required variable is missing or a room ID is malformed, rather than silently misbehaving at runtime.
 
+## Key Export
+Only tested using Element Web.
+1. In Element Web go to Settings>Encryption
+2. Under Advanced export recovery keys with a secure password that should be entered into the KEY_EXPORT_PASSPHRASE variable
+3. Rename the downloaded element-keys.txt to element-keys-shareable.txt and place it into the root bot directory
+
 ## Running it
 
 ### With Docker
