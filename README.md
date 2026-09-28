@@ -72,6 +72,3 @@ On restart, the bot restores the existing session rather than logging in fresh â
 - **`TRIGGER_ROOMS` is a hard allow-list.** Without it, any room the bot happens to be a member of would accept the trigger phrase. Keep this list tight â€” anyone who can message the bot in an allow-listed room can self-serve an invite (and full historical decryption keys) into every target room.
 - **History sharing** Invitees get decryption keys for the room's *entire* history the bot holds keys for, not just messages sent after they join.
 - Don't commit `.env`, `session.json`, or the crypto store to version control.
-
-## License
-
